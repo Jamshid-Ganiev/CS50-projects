@@ -1,0 +1,26 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Encyclopedia
+{% endblock %}
+
+{% block body %}
+    <h1>Create New Entry</h1>
+
+    {% if error_message %}
+        {% for i in error_message %}
+            <h3 class="btn btn-lg btn-warning">{{ i }}</h3>
+        {% endfor %}
+    {% endif %}
+
+    <form action="{% url 'encyclopedia:create_entry' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <textarea class='title_textarea' name="title" id="title" cols="80" rows="1" placeholder="Title" value="{{ request.POST.title }}"></textarea>
+        <br>
+        <textarea name="content" id="content" cols="80" rows="12" placeholder="Your content goes here..." value="{{ request.POST.content }}"></textarea>
+        <br>
+        <button class="btn btn-success btn-lg px-5" type="submit">Post</button>
+    </form>
+
+{% endblock %}

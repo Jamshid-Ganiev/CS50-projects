@@ -1,0 +1,14 @@
+{% extends "encyclopedia/layout.html" %}
+
+
+{% block body %}
+    {% if content != '' %}
+        <p>{{ content | safe }}</p>
+        <a href="{% url 'encyclopedia:edit_entry' title %}">
+            <button class="btn btn-dark btn-lg" type="button">edit</button>
+        </a>
+        
+    {% else %}
+        <h2>No Content with <strong>"{{ title }}"</strong>title!</h2>
+    {% endif %}
+{% endblock %}
