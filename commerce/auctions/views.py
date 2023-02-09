@@ -12,7 +12,14 @@ from .forms import AuctionForm
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    auctions = Auction.objects.all()
+
+    return render(request, "auctions/index.html", {"auctions": auctions})
+
+def listing_details(request, listing_id):
+    listing = Auction.objects.get(id=listing_id)
+
+    return render(request, "auctions/details.html", {"auction": listing})
 
 
 def login_view(request):
@@ -70,17 +77,17 @@ def register(request):
 def create_listing(request):
     template_name = 'auctions/create_listing.html'
 
-    def get(self, request, *args, **kwargs):
+    if request.method == 'GET':
         form = AuctionForm()
-        return render(request, self.template_name, {'form': form})
+        return render(request, template_name, {'form': form})
 
-    def post(self, request, *args, **kwargs):
+    if request.method == 'POST':
         form = AuctionForm(request.POST)
 
         if form.is_valid():
             listing = form.save(commit=False)
             listing.save()
             return redirect('auctions:index')
-        
-        return render(request, self.template_name, {'form': form})
+
+        return render(request, template_name, {'form': form})
     

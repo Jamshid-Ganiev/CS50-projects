@@ -11,9 +11,9 @@
         <h1>Auctions</h1>
         <div>
             {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>.
+                <span class="btn btn-dark"> Signed in as <strong>{{ user.username }}</strong>.</span>
             {% else %}
-                Not signed in.
+                <span class="btn btn-dark">Not signed in.</span>
             {% endif %}
         </div>
         <ul class="nav">
@@ -21,6 +21,9 @@
                 <a class="nav-link" href="{% url 'auctions:index' %}">Active Listings</a>
             </li>
             {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'auctions:create_listing' %}">Create Listing</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'auctions:logout' %}">Log Out</a>
                 </li>

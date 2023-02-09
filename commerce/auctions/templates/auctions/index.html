@@ -1,7 +1,24 @@
 {% extends "auctions/layout.html" %}
+{% load static %}
 
 {% block body %}
-    <h2>Active Listings</h2>
-
-    TODO
+    <h1>Active Listings</h1>
+    {% if auctions %}
+        {% for auction in auctions  %}
+            <a href="{% url 'auctions:details' auction.pk %}">
+                <div class="column-item col-lg-4 btn-light btn-lg mt-2">
+                    <h2 class="btn-secondary btn-lg mb-2 mt-3 text-center">{{ auction.title }}</h2>
+                    <img style="width:250px" src="{{ auction.image_url }}" alt="item_img">
+                    <p>{{ auction.description }}</p>
+                    <p style="font-style: italic;">{{ auction.date }}</p>
+                    <h4 class="btn btn-secondary btn-lg px-5">${{ auction.starting_bid }}</h4>
+                </div>
+            </a>
+            
+            
+        {% endfor %}
+    {% else %}
+        <h4>No items for an auction...</h4>
+    {% endif %}
+    
 {% endblock %}

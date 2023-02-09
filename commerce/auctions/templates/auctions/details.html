@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="container">
+        <h1>Listing: {{ auction.title }}</h1>
+        <p class="btn btn-primary px-4 ml-3">Watchlist</p><br>s
+        <img style="width:300px" src="{{ auction.image_url }}" alt="">
+        <p>{{ auction.description }}</p>
+        <h2>${{ auction.starting_bid }}</h2>
+        <textarea name="" id="textarea-details" cols="100" rows="1" placeholder="Bid"></textarea>
+        <br>
+        <button type="submit" class="btn btn-primary">Place Bid</button>
+        <br>
+        <h3>Details</h3>
+        <ul>
+            <li>Listed by: </li>
+            <li>Category: {{ auction.category }}</li>
+        </ul>
+    </div>
+    
+{% endblock %}
