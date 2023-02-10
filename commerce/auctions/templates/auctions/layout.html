@@ -22,6 +22,12 @@
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'auctions:categories' %}">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'auctions:watchlist' %}">Watchlist</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{% url 'auctions:create_listing' %}">Create Listing</a>
                 </li>
                 <li class="nav-item">
@@ -37,6 +43,18 @@
             {% endif %}
         </ul>
         <hr>
+        <div class="container">
+            {% if messages %}
+            <div class="mt-4">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        
         {% block body %}
         {% endblock %}
     </body>

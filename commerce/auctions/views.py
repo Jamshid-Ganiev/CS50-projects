@@ -1,15 +1,17 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
-# Create your views here.
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import CustomUser, Auction, Bid, Comment
+from .models import Category, CustomUser, Auction, Bid, Comment, Watchlist
 from .forms import AuctionForm
 
+# Create your views here.
 
 def index(request):
     auctions = Auction.objects.all()
@@ -73,7 +75,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
     
-
+@login_required
 def create_listing(request):
     template_name = 'auctions/create_listing.html'
 
@@ -90,4 +92,53 @@ def create_listing(request):
             return redirect('auctions:index')
 
         return render(request, template_name, {'form': form})
+
+@login_required
+def toggle_watchlist(request, item_id):
+    user = request.user
+    item = get_object_or_404(Auction, id=item_id)
+
+    try:
+        watchlist = Watchlist.objects.get(user=user, item=item)
+        if request.method == "POST":
+            watchlist.delete()
+            messages.success(request, "Item removed from your watchlist.")
+        else:
+            messages.warning(request, "Item is already in your watchlist.")
+    except Watchlist.DoesNotExist:
+        Watchlist.objects.create(user=user, item=item)
+        messages.warning(request, "Item added to your watchlist.")
+
+    return redirect('auctions:watchlist')
     
+def view_watchlist(request):
+    user = request.user
+    watchlist = Watchlist.objects.filter(user=user)
+    context = {
+        'watchlist': watchlist,
+        'messages': messages.get_messages(request),
+    }
+
+    return render(request, 'auctions/watchlist.html', context)
+
+def view_categories(request):
+    categories = Category.objects.all()
+    context = {
+        'categories' : categories
+    }
+
+    return render(request, 'auctions/categories.html', context)
+
+def view_category(request, category_id):
+    category = Category.objects.get(id=category_id)
+    if category != '':
+        listings = Auction.objects.filter(category=category)
+        context = {
+            'category': category,
+            'listings': listings,
+        }
+    else:
+        context = {
+            'category': "No auctions for this category for now"
+        }
+    return render(request, 'auctions/category.html', context)

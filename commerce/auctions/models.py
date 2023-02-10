@@ -10,7 +10,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100, blank=True)
 
     def __str__(self): 
-        return f"{self.name}"
+        return self.name
 
 
 class Auction(models.Model):
@@ -19,7 +19,7 @@ class Auction(models.Model):
     image_url = models.CharField(max_length=250)
     description = models.TextField(max_length=500, blank=True, default="")
     starting_bid = models.IntegerField(blank=False)
-    date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
 
     def __str__(self): 
@@ -43,3 +43,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.user} for {self.auction.title}"
+    
+class Watchlist(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    item = models.ForeignKey(Auction, on_delete=models.CASCADE, default=None)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.item.title

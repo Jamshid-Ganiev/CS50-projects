@@ -17,6 +17,7 @@
             <li>Listed by: </li>
             <li>Category: {{ auction.category }}</li>
         </ul>
+        <a href="{% url 'auctions:toggle_watchlist' auction.id %}"><p class="btn btn-outline-primary btn-lg">Add to Watchlist</p></a>
     </div>
     
 {% endblock %}
