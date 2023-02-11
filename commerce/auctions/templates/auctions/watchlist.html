@@ -7,7 +7,7 @@
     {% for item in watchlist %}
     <div class="col-lg-5 mx-2 my-2 watchlist-div" style="border: 1px solid black">
         <h2>{{ item.item.title }}</h2>
-        <img style="width: 150px; height: 190px;" src="{{ item.item.image_url }}" alt="">
+        <img style="width: 150px; height: 200px;" src="{{ item.item.image_url }}" alt="">
         <p>Added at {{ item.added_at }}</p>
         <p>Price: ${{ item.item.starting_bid }}</p>
         <form action="{% url 'auctions:toggle_watchlist' item.item.id %}" method="post">
