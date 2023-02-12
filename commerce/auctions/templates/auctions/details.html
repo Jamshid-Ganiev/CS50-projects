@@ -4,7 +4,6 @@
 {% block body %}
     <div class="container">
         <h1>Listing: {{ auction.title }}</h1>
-        <p class="btn btn-primary px-4 ml-3">Watchlist</p><br>s
         <img style="width:300px" src="{{ auction.image_url }}" alt="">
         <p>{{ auction.description }}</p>
         <h2>${{ auction.starting_bid }}</h2>
@@ -17,7 +16,36 @@
             <li>Listed by: </li>
             <li>Category: {{ auction.category }}</li>
         </ul>
-        <a href="{% url 'auctions:toggle_watchlist' auction.id %}"><p class="btn btn-outline-primary btn-lg">Add to Watchlist</p></a>
+        <a href="{% url 'auctions:toggle_watchlist' auction.id %}"><p class="btn btn-secondary">Add to Watchlist</p></a>
+
+        <center>
+            <form method="post" action="{% url 'auctions:create_comment' auction.id %}">
+                {% csrf_token %}
+                <textarea name="comment" id="comment" cols="100" rows="6"></textarea>
+                <br>
+                <input type="submit" value="Add Comment" class="btn btn-primary">
+            </form>
+        </center>
+        {% if comments %}
+            <h4>Comments</h4><hr>
+            {% for comment in comments %}
+                <div class="row mb-3">
+                    <div class="col-8">
+                        <p style="word-wrap: break-word;">{{ comment.comment }}</p>
+                        <b>Author: @{{ comment.user.username }}</b><span class="fw-lighter"> on {{ comment.date }}</span>
+                        {% if comment.user == request.user %}
+                            <a href="{% url 'auctions:edit_comment' auction.id comment.id %}" class="btn btn-dark"><i class="bi bi-pen">edit</i></a>
+                            <a href="{% url 'auctions:delete_comment' auction.id comment.id %}" class="btn btn-dark"><i class="bi bi-trash">trash</i></a>
+                        {% endif %}
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+        {% else %}
+                <hr>
+            <h4><span class="text-secondary">No reviews yet...</span></h4>
+        {% endif %}
+
     </div>
     
 {% endblock %}

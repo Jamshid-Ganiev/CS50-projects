@@ -6,7 +6,7 @@
     {% if auctions %}
         {% for auction in auctions  %}
             <a href="{% url 'auctions:details' auction.id %}">
-                <div class="column-item col-lg-4 btn-light btn-lg mt-2">
+                <div class="column-item col-lg-6 btn-light btn-lg mt-2">
                     <h2 class="btn-secondary btn-lg mb-2 mt-3 text-center">{{ auction.title }}</h2>
                     <img style="width:250px" src="{{ auction.image_url }}" alt="item_img">
                     <p>{{ auction.description }}</p>

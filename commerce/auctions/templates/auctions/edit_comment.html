@@ -1,0 +1,17 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h1>Edit Comment</h1>
+    <div class="row mb-4">
+        <div class="col-6">
+            <form method="post" action="{% url 'auctions:edit_comment' auction.id comment.id %}">
+                {% csrf_token %}
+                <textarea name="comment" id="" cols="140" rows="6">{{ comment.comment }}</textarea>
+                <br>
+                <button class="btn btn-outline-success">Save</button>
+            </form>
+        </div>
+    </div>
+    
+{% endblock %}

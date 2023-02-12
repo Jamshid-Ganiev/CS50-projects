@@ -18,10 +18,11 @@ def index(request):
 
     return render(request, "auctions/index.html", {"auctions": auctions})
 
-def listing_details(request, listing_id):
-    listing = Auction.objects.get(id=listing_id)
+def listing_details(request, auction_id):
+    listing = Auction.objects.get(id=auction_id)
+    comments = listing.comments.all()
 
-    return render(request, "auctions/details.html", {"auction": listing})
+    return render(request, "auctions/details.html", {"auction": listing, "comments": comments})
 
 
 def login_view(request):
@@ -142,3 +143,31 @@ def view_category(request, category_id):
             'category': "No auctions for this category for now"
         }
     return render(request, 'auctions/category.html', context)
+
+# CREATE DELETE EDIT Comment
+def create_comment(request, auction_id):
+    auction = Auction.objects.get(id=auction_id)
+    if request.method == 'POST':
+        user = request.user
+        comment = request.POST.get('comment')
+        if comment:
+            Comment.objects.create(user=user, auction=auction, comment=comment)
+            return redirect('auctions:details', auction_id=auction_id)
+    return render(request, 'auctions/details.html', {'auction': auction})
+
+def delete_comment(request, auction_id, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    if request.user == comment.user:
+        comment.delete()
+    return redirect('auctions:details', auction_id=auction_id)
+
+def edit_comment(request, auction_id, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    auction = Auction.objects.get(id=auction_id)
+
+    if request.user == comment.user:
+        if request.method == 'POST':
+            comment.comment = request.POST.get('comment')
+            comment.save()
+            return redirect('auctions:details', auction_id = auction_id)
+    return render(request, 'auctions/edit_comment.html', {'comment': comment, 'auction': auction})
